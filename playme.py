@@ -1,4 +1,16 @@
 import base as clss
+from bonus import DoubleOrNothing
+
+
+def _prompt_restart(bet):
+    """Ask the player whether to restart with a fresh stake. Returns True to continue."""
+    print(f"\n  {clss.bcolors.RED}Out of coins.{clss.bcolors.ENDC}")
+    restart = input("  Restart with 100? [y/n]: ").strip().lower()
+    if restart == 'y':
+        bet.balance = clss.DEFAULT_BALANCE
+        clss.Bet.save_balance(bet.balance)
+        return True
+    return False
 
 
 def main():
@@ -9,6 +21,9 @@ def main():
     bet = clss.Bet()
 
     while True:
+        if bet.balance <= 0:
+            if not _prompt_restart(bet):
+                break
         clss.sys_clear(OnScreen=clss.payout)
         print(f"  Balance: {clss.bcolors.GREEN}{bet.balance}{clss.bcolors.ENDC} coins\n")
 
@@ -46,20 +61,21 @@ def main():
             for line in new_flop:
                 print(clss.Cards.MARGIN_LEFT + line)
 
-        # Evaluate and pay out
+        # Evaluate, optionally play Double-or-Nothing, then commit winnings.
         hand_name, multiplier = clss.evaluate_hand(new_hand)
-        winnings = bet.payout(multiplier)
+        winnings = bet.compute_winnings(multiplier)
+
+        if winnings > 0:
+            winnings = DoubleOrNothing(winnings).play()
+
+        bet.award(winnings)
 
         clss.display_result(hand_name, multiplier, winnings, bet.balance)
 
         if bet.balance <= 0:
-            print(f"\n  {clss.bcolors.RED}Out of coins.{clss.bcolors.ENDC}")
-            restart = input("  Restart with 100? [y/n]: ").strip().lower()
-            if restart == 'y':
-                bet.balance = clss.DEFAULT_BALANCE
-                clss.Bet.save_balance(bet.balance)
-                continue
-            break
+            if not _prompt_restart(bet):
+                break
+            continue
 
         again = input("\n  Again? [Enter] / q to quit: ").strip().lower()
         if again == 'q':

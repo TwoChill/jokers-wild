@@ -442,12 +442,14 @@ class Bet:
         self.save_balance(self.balance)
         return True
 
-    def payout(self, multiplier):
-        """Add winnings to balance. Returns the amount won."""
-        winnings      = self.current_bet * multiplier
-        self.balance += winnings
+    def compute_winnings(self, multiplier):
+        """Return the amount won without committing to balance."""
+        return self.current_bet * multiplier
+
+    def award(self, amount):
+        """Commit an already-computed winnings amount to balance and disk."""
+        self.balance += amount
         self.save_balance(self.balance)
-        return winnings
 
 
 

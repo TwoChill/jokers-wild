@@ -68,7 +68,9 @@ python playme.py
 
 4. **See your result.** The game shows your hand, your winnings, and your updated balance.
 
-5. **Keep going or quit.** Press Enter to play another hand, or type `q` to quit.
+5. **Double or Nothing (optional).** After any winning hand you'll be offered a bonus round. One reference card is shown face-up on the left, four face-down cards on the right. Pick one of the four -- if its value is strictly higher than the reference, your winnings double. Tie or lower and you lose all your winnings from this hand. You can keep doubling up to 8 times (256x) or cash out at any prompt by typing `n`. Losing hands skip the offer.
+
+6. **Keep going or quit.** Press Enter to play another hand, or type `q` to quit.
 
 ### Winning hands (from best to worst)
 

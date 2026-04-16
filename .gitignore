@@ -353,7 +353,9 @@ MigrationBackup/
 CLAUDE.md
 INTENT.md
 test_base.py
+test_bonus.py
 coins.json
+BUG_Found.md
 .claude/
 .idea/
 for_shadowcast.md
